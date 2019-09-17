@@ -1,0 +1,30 @@
+{
+    "name": "goodcatch/guanyierp",
+    "description": "make guanyierp v2 Api easier",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Allen Li",
+            "email": "morningbuses@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0",
+        "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Goodcatch\\Guanyi\\": "src/"
+
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Goodcatch\\Guanyi\\Laravel\\ServiceProvider"
+            ]
+        }
+    }
+}
