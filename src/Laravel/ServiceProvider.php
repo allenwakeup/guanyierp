@@ -48,7 +48,7 @@ class ServiceProvider extends LaravelServiceProvider
     {
 
         $this->mergeConfigFrom(
-            __DIR__.'/../config/guanyi.php', 'guanyi'
+            __DIR__.'/../../config/guanyi.php', 'guanyi'
         );
 
 
@@ -64,7 +64,7 @@ class ServiceProvider extends LaravelServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/guanyi.php' => config_path('guanyi.php'),
+                __DIR__.'/../../config/guanyi.php' => config_path('guanyi.php'),
             ], 'guanyi-config');
         }
     }
