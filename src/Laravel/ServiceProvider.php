@@ -9,12 +9,16 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Goodcatch\Laravel;
+namespace Goodcatch\Guanyi\Laravel;
 
 use Goodcatch\Guanyi\Guanyi;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
-
+/**
+ * Class ServiceProvider
+ * @package Goodcatch\Guanyi\Laravel
+ * @author Allen, Li
+ */
 class ServiceProvider extends LaravelServiceProvider
 {
     /**
@@ -32,6 +36,7 @@ class ServiceProvider extends LaravelServiceProvider
     public function register()
     {
         $this->configure();
+        $this->offerPublishing();
         $this->registerServices();
 
     }
@@ -41,6 +46,22 @@ class ServiceProvider extends LaravelServiceProvider
      */
     protected function configure()
     {
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/guanyi.php', 'guanyi'
+        );
+
+
+    }
+
+    /**
+     * Setup the resource publishing groups for Horizon.
+     *
+     * @return void
+     */
+    protected function offerPublishing()
+    {
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/guanyi.php' => config_path('guanyi.php'),
@@ -49,13 +70,18 @@ class ServiceProvider extends LaravelServiceProvider
     }
 
     /**
-     * Register Horizon's services in the container.
+     * Register Guanyi services in the container.
+     *
+     * @see link(http://gop.guanyierp.com/hc/kb/article/1235511/ Api_doc)
+     *
      *
      * @return void
      */
     protected function registerServices()
     {
-        $this->app->singleton(Guanyi::class);
+        $this->app->bind('guanyierpapi', function ($app) {
+            return new Guanyi ($app('config')['guanyi']);
+        });
     }
 
 }

@@ -12,7 +12,9 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.0",
-        "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0"
+        "illuminate/contracts": "~5.5.0|~5.6.0|~5.7.0|~5.8.0",
+        "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0",
+        "guzzlehttp/guzzle": "^6.3@dev"
     },
     "autoload": {
         "psr-4": {
@@ -24,7 +26,10 @@
         "laravel": {
             "providers": [
                 "Goodcatch\\Guanyi\\Laravel\\ServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Guanyi": "Goodcatch\\Guanyi\\Facades\\Guanyi"
+            }
         }
     }
 }
