@@ -8,7 +8,6 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-
 namespace Goodcatch\Guanyi\Laravel;
 
 use Goodcatch\Guanyi\Guanyi;
@@ -21,14 +20,6 @@ use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
  */
 class ServiceProvider extends LaravelServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot()
-    {
-
-    }
-
 
     /**
      * Register any application services.
@@ -50,7 +41,6 @@ class ServiceProvider extends LaravelServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../../config/guanyi.php', 'guanyi'
         );
-
 
     }
 
@@ -79,8 +69,9 @@ class ServiceProvider extends LaravelServiceProvider
      */
     protected function registerServices()
     {
-        $this->app->bind('guanyierpapi', function ($app) {
-            return new Guanyi ($app('config')['guanyi']);
+        $this->app->singleton('guanyierpapi', function ($app) {
+            $config = $app->make('config')->get('guanyi');
+            return new Guanyi ($config);
         });
     }
 
