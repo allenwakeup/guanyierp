@@ -52,10 +52,29 @@ use Goodcatch\Guanyi\Facades\Guanyi;
 public function xxx () {
 
     // get product by product code
-    $product = Guanyi::getProducts('Product Code');
+    $model = Guanyi::getProducts('Product Code');
 
-    // get products, $products->items presents all of product list
-    $products = Guanyi::getProducts();
+    // get products, $products->data presents all of product list
+    $model = Guanyi::getProducts();
+    
+    // checkout whether success or not
+    if ($products->success)
+    {
+    
+        // go through list models
+        foreach ($model->data as $index => $product)
+        {
+            // get product fields $product->xxx
+        }
+        
+    } else {
+    
+        dd ($model->errorCodel); // error code
+        dd ($model->errorDesc); // error message
+        dd ($model->subErrorDesc); // additional error message
+        dd ($model->requestMethod); // guanyi ERP method name
+
+    }
 }
 
 
@@ -65,8 +84,16 @@ public function xxx () {
 
 
 Route::get('/guanyi/products', function () {
+
     $model = Goodcatch\Guanyi\Facades\Guanyi::getProducts();
-    return $model->data;
+    
+    if ($model->success)
+    {
+        return $model->data;
+    } else {
+        return $model->errorDesc;
+    }
+    
 });
 
 

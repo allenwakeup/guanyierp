@@ -111,6 +111,11 @@ class Guanyi
     private function transform (Model $model, $collection):Model
     {
         $transform = new Model;
+        $transform->success = $model->success;
+        $transform->errorCode = $model->errorCode;
+        $transform->errorDesc = $model->errorDesc;
+        $transform->subErrorDesc = $model->subErrorDesc;
+        $transform->requestMethod = $model->requestMethod;
         $transform->total = $model->total;
         $transform->data = $collection ?? \collect ([]);
         return $transform;
