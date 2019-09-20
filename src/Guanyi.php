@@ -108,11 +108,11 @@ class Guanyi
         return new Model($result);
     }
 
-    private function transform (Model $model, Collection $collection):Model
+    private function transform (Model $model, $collection):Model
     {
         $transform = new Model;
         $transform->total = $model->total;
-        $transform->data = $collection;
+        $transform->data = $collection ?? \collect ([]);
         return $transform;
     }
 
