@@ -89,9 +89,10 @@ class Guanyi
                 $result = $this->handleResp(\GuzzleHttp\json_decode($body->getContents(), true));
             }
         } catch (RequestException $e) {
-            $result ['exception'] = [Psr7\str($e->getRequest())];
+            $result = new Model;
+            $result->exception = [Psr7\str($e->getRequest())];
             if ($e->hasResponse()) {
-                $result ['exception'] [] = Psr7\str($e->getResponse());
+                $result->exception [] = Psr7\str($e->getResponse());
             }
         }
         return $result;
@@ -118,6 +119,12 @@ class Guanyi
         $transform->requestMethod = $model->requestMethod;
         $transform->total = $model->total;
         $transform->data = $collection ?? \collect ([]);
+
+        // got error
+        if (isset ($model->exception))
+        {
+            $transform->exception = $model->exception;
+        }
         return $transform;
     }
 
