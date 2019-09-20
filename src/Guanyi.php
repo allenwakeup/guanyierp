@@ -164,6 +164,27 @@ class Guanyi
     }
 
     /**
+     * Get model by parameter key-value
+     *
+     * @param string $method
+     * @param string|null $param_key
+     * @param string|null $param_val
+     * @param array $params
+     * @param int $page_no
+     * @param int $page_size
+     * @return Model
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function getModelByParameter (string $method, string $param_key = null, string $param_val = null, array $params = [], int $page_no = 1, int $page_size = 10): Model
+    {
+        if (! is_null($param_val) && ! is_null ($param_key))
+        {
+            $params [$param_key] = $param_val;
+        }
+        return $this->getModel($method, $params, $page_no, $page_size);
+    }
+
+    /**
      * Get model by parameter name 'code'
      *
      * @param string $method
@@ -176,11 +197,7 @@ class Guanyi
      */
     private function getModelByCode (string $method, string $code = null, array $params = [], int $page_no = 1, int $page_size = 10): Model
     {
-        if (! is_null($code))
-        {
-            $params ['code'] = $code;
-        }
-        return $this->getModel($method, $params, $page_no, $page_size);
+        return $this->getModelByParameter($method, 'code', $code, $params, $page_no, $page_size);
     }
 
 
@@ -303,9 +320,7 @@ class Guanyi
      */
     public function getPurchasesByWarehouseCode(string $warehouse_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
     {
-        $params ['warehouse_code'] = $warehouse_code;
-
-        $model= $this->getModel('gy.erp.purchase.get', $params, $page_no, $page_size);
+        $model= $this->getModelByParameter('gy.erp.purchase.get', 'warehouse_code', $warehouse_code, $params, $page_no, $page_size);
 
         return $this->transform ($model, $model->purchaseOrderList);
     }
@@ -322,9 +337,8 @@ class Guanyi
      */
     public function getPurchasesBySupplierCode(string $supplier_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
     {
-        $params ['supplier_code'] = $supplier_code;
 
-        $model= $this->getModel('gy.erp.purchase.get', $params, $page_no, $page_size);
+        $model= $this->getModelByParameter('gy.erp.purchase.get', 'supplier_code', $supplier_code, $params, $page_no, $page_size);
 
         return $this->transform ($model, $model->purchaseOrderList);
     }
