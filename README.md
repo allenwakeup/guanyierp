@@ -29,6 +29,7 @@ And then add environment key-values to `.env` file
 GUANYI_API_APP_KEY=xxxxxxx
 GUANYI_API_SESSION_KEY=xxxxxxx
 GUANYI_API_SECRET=xxxxxxx
+GUANYI_API_TIME_OUT=2
 
 ```
 
@@ -52,10 +53,10 @@ use Goodcatch\Guanyi\Facades\Guanyi;
 public function xxx () {
 
     // get product by product code
-    $model = Guanyi::getProducts('Product Code');
+    $model = Guanyi::getProducts ('Product Code');
 
     // get products, $products->data presents all of product list
-    $model = Guanyi::getProducts();
+    $model = Guanyi::getProducts ();
     
     // checkout whether success or not
     if ($products->success)
@@ -85,16 +86,34 @@ public function xxx () {
 
 Route::get('/guanyi/products', function () {
 
-    $model = Goodcatch\Guanyi\Facades\Guanyi::getProducts();
+    // get products by code, with page_no=1, and page_size=9999
+    $model = Goodcatch\Guanyi\Facades\Guanyi::getProducts ('Product Code', [], 1, 9999);
     
     if ($model->success)
     {
         return $model->data;
     } else {
+        
+        // error message from guanyi api
+        // for example: page_size=9999 is out of given range 1~99
         return $model->errorDesc;
     }
     
 });
+
+// got library exceptions
+$model = Goodcatch\Guanyi\Facades\Guanyi::getProducts ();
+
+if (! $model->success && isset ($model->exception) && is_array ($model->exception))
+{
+    foreach ($model->exception as $ex)
+    {
+        // Note: Increace GUANYI_API_TIME_OUT while keep getting exception.
+        // string $ex
+    }
+
+}
+
 
 
 
@@ -118,6 +137,13 @@ Route::get('/guanyi/products', function () {
 商品查询（gy.erp.items.get）
  
 ---
+
+采购管理
+
+#### getPurchases
+
+采购订单查询（gy.erp.purchase.get）
+
 
 
 

@@ -90,9 +90,9 @@ class Guanyi
             }
         } catch (RequestException $e) {
             $result = new Model;
-            $result->exception = [Psr7\str($e->getRequest())];
+            $result->exception = [urldecode(Psr7\str($e->getRequest()))];
             if ($e->hasResponse()) {
-                $result->exception [] = Psr7\str($e->getResponse());
+                $result->exception [] = urldecode(Psr7\str($e->getResponse()));
             }
         }
         return $result;
