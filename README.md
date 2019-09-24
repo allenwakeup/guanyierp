@@ -1,8 +1,9 @@
-Guanyi ERP API PHP Library
+Guanyi ERP API Library
 ======
+
 Make Guanyi ERP API easier
 
-### Installation
+## Installation
 
 ```
 composer require goodcatch/guanyierp
@@ -10,7 +11,7 @@ composer require goodcatch/guanyierp
 php artisan vendor:publish --tag guanyi-config
 ```
 
-### Configuration
+## Configuration
 
 In Configuration file `config/guanyi.php`, checkout following configuration 
 
@@ -41,12 +42,11 @@ GUANYI_API=http://v2.api.guanyierp.com/rest/erp_open
 ```
 
 
-### Usage
+## Usage
 
-Everywhere, in Closure, Functions... etc. For examples:
+For examples:
 
 ```php
-
 
 use Goodcatch\Guanyi\Facades\Guanyi;
 
@@ -114,35 +114,89 @@ if (! $model->success && isset ($model->exception) && is_array ($model->exceptio
 
 }
 
+// use criteria, note that get started with 'query' before 'critieria'
+Goodcatch\Guanyi\Facades\Guanyi::query ()
+    ->criteria ('start_date', '2019-09-24 00:00:00')
+    ->criteria ('end_date', '2019-09-25 23:59:59')
+    // use httpclient
+    ->setHttpClient (new GuzzleHttp\Client ([
+        // options
+        'timeout' => 2
+    ]))
+    ->getProducts ([
+        // overrite criteria
+        'start_date' => '2019-09-25 00:00:00'
+    ]);
+
 
 
 
 ```
 
 
-### API definitions
+## Methods
 
-基础信息
+### 基础信息
 
-#### getShops
+#### 店铺查询（gy.erp.shop.get）
 
-店铺查询（gy.erp.shop.get）
+##### getShops
+获取店铺列表
+
+##### getWarehouses
+获取仓库列表
 
 ---
 
-商品管理
+### 商品管理
 
-#### getProducts
+#### 商品查询（gy.erp.items.get）
 
-商品查询（gy.erp.items.get）
+##### getProducts
+获取商品列表
  
 ---
 
-采购管理
+### 采购管理
 
-#### getPurchases
+#### 采购订单查询（gy.erp.purchase.get）
 
-采购订单查询（gy.erp.purchase.get）
+##### getPurchases
+获取采购订单列表
+
+##### getPurchasesByWarehouseCode
+根据仓库代码获取采购订单列表
+
+##### getPurchasesBySupplierCode
+根据供应商代码获取采购订单列表
+
+
+---
+
+### 订单管理
+
+#### 发货单查询（gy.erp.trade.deliverys.get）
+
+##### getTradeDeliverys
+获取发货单列表
+
+##### getTradeDeliverysByCode
+
+根据单据编号获取发货单列表
+
+##### getTradeDeliverysByWarehouse
+
+根据仓库代码获取发货单列表
+
+##### getTradeDeliverysByShop
+
+根据店铺代码获取发货单列表
+
+##### getTradeDeliverysByOuter
+
+根据平台单号获取发货单列表
+
+
 
 
 

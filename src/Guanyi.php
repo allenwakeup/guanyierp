@@ -56,6 +56,10 @@ class Guanyi
      */
     private $client;
 
+    /**
+     * @var array search criteria
+     */
+    private $criteria;
 
     /**
      * Guanyi constructor.
@@ -71,6 +75,37 @@ class Guanyi
         $this->client = new Client([
             'timeout' => $config ['timeout'],
         ]);
+    }
+
+    /**
+     * @param Client $client
+     * @return Guanyi
+     */
+    public function setHttpClient (Client $client)
+    {
+        $this->client = $client;
+        return $this;
+    }
+
+    public function query ()
+    {
+        $this->criteria = [];
+        return $this;
+    }
+
+    /**
+     * add criteria
+     * @param string $search
+     * @param $value
+     * @return $this
+     */
+    public function criteria (string $search, $value)
+    {
+        if (isset ($this->criteria))
+        {
+            $this->criteria [$search] = $value;
+        }
+        return $this;
     }
 
     /**
@@ -95,6 +130,11 @@ class Guanyi
                 $result->exception [] = urldecode(Psr7\str($e->getResponse()));
             }
         }
+        if (isset ($this->criteria))
+        {
+            unset ($this->criteria);
+        }
+
         return $result;
     }
 
@@ -139,8 +179,24 @@ class Guanyi
      */
     private function request(string $method, array $req = null, int $page_no = 1, int $page_size = 10): Request
     {
+        if ($page_no < 1)
+        {
+            $page_no = 1;
+        }
+        if ($page_size >= 50)
+        {
+            $page_size = 49;
+        } else if ($page_size < 1)
+        {
+            $page_size = 1;
+        }
+
         if (is_null($req)) {
             $req = [];
+        }
+        if (isset ($this->criteria) && count ($this->criteria) > 0)
+        {
+            $req = array_merge ($this->criteria, $req);
         }
         $req ['appkey'] = $this->key;
         $req ['sessionkey'] = $this->session;
@@ -304,8 +360,9 @@ class Guanyi
 
 
 
+
     /**
-     * 根据采购订单编号获取采购订单列表
+     * 获取采购订单列表
      *
      * @param string $code 采购订单编号
      * @param array $params
@@ -359,6 +416,101 @@ class Guanyi
 
 
 
+    // ********************************************************************
+    // ************************* 订单管理 **********************************
+    // ********************************************************************
+
+
+
+    /**
+     * 获取发货单列表
+     *
+     * @param array $params
+     * @param int $page_no 页数
+     * @param int $page_size 页数据数量
+     * @return Model
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getTradeDeliverys(array $params = [], int $page_no = 1, int $page_size = 10): Model
+    {
+
+        $model= $this->getModel('gy.erp.trade.deliverys.get', $params, $page_no, $page_size);
+
+        return $this->transform ($model, $model->deliverys);
+    }
+
+    /**
+     * 根据单据编号获取发货单列表
+     *
+     * @param string $code 单据编号
+     * @param array $params
+     * @param int $page_no 页数
+     * @param int $page_size 页数据数量
+     * @return Model
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getTradeDeliverysByCode(string $code, array $params = [], int $page_no = 1, int $page_size = 10): Model
+    {
+
+        $model= $this->getModelByCode('gy.erp.trade.deliverys.get', $code, $params, $page_no, $page_size);
+
+        return $this->transform ($model, $model->deliverys);
+    }
+
+    /**
+     * 根据仓库代码获取发货单列表
+     *
+     * @param string $warehouse_code 仓库代码
+     * @param array $params
+     * @param int $page_no 页数
+     * @param int $page_size 页数据数量
+     * @return Model
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getTradeDeliverysByWarehouse(string $warehouse_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
+    {
+
+        $model= $this->getModelByParameter('gy.erp.trade.deliverys.get', 'warehouse_code', $warehouse_code, $params, $page_no, $page_size);
+
+        return $this->transform ($model, $model->deliverys);
+    }
+
+    /**
+     * 根据店铺代码获取发货单列表
+     *
+     * @param string $shop_code 店铺代码
+     * @param array $params
+     * @param int $page_no 页数
+     * @param int $page_size 页数据数量
+     * @return Model
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getTradeDeliverysByShop(string $shop_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
+    {
+
+        $model= $this->getModelByParameter('gy.erp.trade.deliverys.get', 'shop_code', $shop_code, $params, $page_no, $page_size);
+
+        return $this->transform ($model, $model->deliverys);
+    }
+
+
+    /**
+     * 根据平台单号获取发货单列表
+     *
+     * @param string $outer_code 平台单号
+     * @param array $params
+     * @param int $page_no 页数
+     * @param int $page_size 页数据数量
+     * @return Model
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getTradeDeliverysByOuter(string $outer_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
+    {
+
+        $model= $this->getModelByParameter('gy.erp.trade.deliverys.get', 'outer_code', $outer_code, $params, $page_no, $page_size);
+
+        return $this->transform ($model, $model->deliverys);
+    }
 
     /**
      * 签名
