@@ -1,6 +1,6 @@
 {
     "name": "goodcatch/guanyierp",
-    "description": "make guanyierp v2 Api easier",
+    "description": "make guanyierp Api easier",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -14,7 +14,7 @@
         "php": ">=7.0",
         "illuminate/contracts": "~5.5.0|~5.6.0|~5.7.0|~5.8.0",
         "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0",
-        "guzzlehttp/guzzle": "^6.3@dev"
+        "guzzlehttp/guzzle": "^6.0"
     },
     "autoload": {
         "psr-4": {
