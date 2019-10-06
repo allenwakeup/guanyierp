@@ -13,6 +13,7 @@
 namespace Goodcatch\Guanyi;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\SeekException;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\RequestException;
@@ -129,6 +130,9 @@ class Guanyi
             if ($e->hasResponse()) {
                 $result->exception [] = urldecode(Psr7\str($e->getResponse()));
             }
+        } catch (SeekException $e) {
+            $result = new Model;
+            $result->exception = [$e->getMessage()];
         }
         if (isset ($this->criteria))
         {
@@ -431,7 +435,7 @@ class Guanyi
      * @return Model
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getTradeDeliverys(array $params = [], int $page_no = 1, int $page_size = 10): Model
+    public function getTradeDeliveries(array $params = [], int $page_no = 1, int $page_size = 10): Model
     {
 
         $model= $this->getModel('gy.erp.trade.deliverys.get', $params, $page_no, $page_size);
@@ -449,7 +453,7 @@ class Guanyi
      * @return Model
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getTradeDeliverysByCode(string $code, array $params = [], int $page_no = 1, int $page_size = 10): Model
+    public function getTradeDeliveriesByCode(string $code, array $params = [], int $page_no = 1, int $page_size = 10): Model
     {
 
         $model= $this->getModelByCode('gy.erp.trade.deliverys.get', $code, $params, $page_no, $page_size);
@@ -467,7 +471,7 @@ class Guanyi
      * @return Model
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getTradeDeliverysByWarehouse(string $warehouse_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
+    public function getTradeDeliveriesByWarehouse(string $warehouse_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
     {
 
         $model= $this->getModelByParameter('gy.erp.trade.deliverys.get', 'warehouse_code', $warehouse_code, $params, $page_no, $page_size);
@@ -485,7 +489,7 @@ class Guanyi
      * @return Model
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getTradeDeliverysByShop(string $shop_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
+    public function getTradeDeliveriesByShop(string $shop_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
     {
 
         $model= $this->getModelByParameter('gy.erp.trade.deliverys.get', 'shop_code', $shop_code, $params, $page_no, $page_size);
@@ -504,7 +508,7 @@ class Guanyi
      * @return Model
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getTradeDeliverysByOuter(string $outer_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
+    public function getTradeDeliveriesByOuter(string $outer_code, array $params = [], int $page_no = 1, int $page_size = 10): Model
     {
 
         $model= $this->getModelByParameter('gy.erp.trade.deliverys.get', 'outer_code', $outer_code, $params, $page_no, $page_size);
